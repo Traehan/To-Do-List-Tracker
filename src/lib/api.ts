@@ -56,7 +56,11 @@ function toTask({ task_assignees, task_labels, comments, user_id: _owner, ...row
   }
 }
 
-/** Task -> the columns that live on the tasks table. */
-export function toRow({ assigneeIds: _a, labelIds: _l, commentCount: _c, ...row }: Task) {
+/**
+ * Task -> the columns we send when saving a task. created_at is left out so the
+ * database sets it. (Sending it as undefined is not the same: the column would
+ * still be listed in the request and saved as NULL, which the table rejects.)
+ */
+export function toRow({ assigneeIds: _a, labelIds: _l, commentCount: _c, created_at: _t, ...row }: Task) {
   return row
 }

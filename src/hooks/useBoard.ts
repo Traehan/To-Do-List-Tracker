@@ -80,9 +80,9 @@ export function useBoard() {
   const linkRows = (tasks: Task[], kind: keyof typeof LINK) =>
     tasks.flatMap((task) => task[kind].map((id) => ({ task_id: task.id, [LINK[kind].column]: id })))
 
-  /** Saves tasks plus their assignee and label links. created_at is left for the database to set. */
+  /** Saves tasks plus their assignee and label links. */
   async function saveTasks(tasks: Task[]) {
-    await api.insert('tasks', tasks.map((task) => ({ ...api.toRow(task), created_at: undefined })))
+    await api.insert('tasks', tasks.map(api.toRow))
     await Promise.all(
       (['assigneeIds', 'labelIds'] as const).map((kind) => {
         const rows = linkRows(tasks, kind)
